@@ -1,0 +1,27 @@
+<section  id="top" class="one dark cover">
+    <div class="container">
+        <header>
+            <h2>Aliados</h2>
+        </header>  
+
+        <table>
+          <tbody align="left">
+            <% @allies.each do |ally| %>
+              <tr>
+                <td><%= ally.name %></td>        
+                <td><%= link_to '<span class="icon fa-search"></span>'.html_safe, edit_ally_path(ally) %></td>
+                <td><%= link_to '<span class="icon fa-remove"></span>'.html_safe, ally, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+
+        <%= button_to 'Nuevo Aliado', new_ally_path,:method=> :get %>
+
+    </div>
+</section>
+
+
+
+

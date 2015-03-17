@@ -1,0 +1,60 @@
+<div class="formdiv" align= "center">
+    <%= form_for(@candidate ) do |f| %>
+      <% if @candidate.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@candidate.errors.count, "error") %> prohibited this candidate from being saved:</h2>
+
+          <ul>
+          <% @candidate.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :name, "Nombre"%>
+        <%= f.text_field :name %>
+      </div>
+      <b>NickNames:</b>
+      <ul>
+        <% @candidate.nicknames.each do |nn| %>
+          <li>
+            <%=nn.nick%>&nbsp<%= link_to '<span class="icon fa-remove"></span>'.html_safe, nn, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </li>
+        <%end%>
+      </ul>
+
+      <%= f.fields_for :nicknames,@candidate.nicknames.build do |nn|%>
+        <%= f.label :nick, "Nuevo Nickname" %><%= nn.text_field :nick%>
+      <%end%>
+
+      <% @candidate.can_especial_links.each do |el| %>
+        <%= el.url.to_s %>
+      <%end%>
+      
+      <%= f.fields_for :can_especial_links,@candidate.can_especial_links.build do |form_link|%>
+          <%= f.label :nick, "Nuevo Link" %><%= form_link.text_field :url%> <%=form_link.file_field :pdf%>         
+      <%end%>
+      <div class="row">
+          <div class="6u">
+            <%= f.select :category,PUESTOS.each_with_index.map{ |val, i| [ val, i ]  },:include_blank => "Puestos"%>
+          </div>
+          <div class="6u">
+            <%= f.select :zone,MUNICIPIOS.each_with_index.map{ |val, i| [ val, i ]  },:include_blank => "Municipios" %>
+          </div>
+      </div>
+      <div class="row">
+        <div class="6u">
+          <%= f.select :is_candidate,ISCANDIDATE.each_with_index.map{ |val, i| [ val, i ]  },:include_blank => "---" %>
+        </div>  
+      </div>
+
+      <%=image_tag @candidate.avatar.url,height: '200', width: '200'%>
+      <%= f.file_field :avatar %>
+
+      <div class="actions">
+        <%= f.submit "Actualizar" %>
+      </div>
+    <% end %>
+</div>

@@ -1,0 +1,103 @@
+
+<svg >
+      
+</svg> 
+
+<h1>Relaciones</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Link             </th>
+      <th>Aliado           </th>
+      <th>Candidato        </th>
+      <th>Tipo de Relación </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @relations.each do |relation| %>
+      <tr>
+        <td><a href= "<%= relation.link_st %>" >link</a></td>
+        <td><%= relation.ally_st %></td>
+        <td><%= relation.candidate_st %></td>
+        <td><%= relation.relation_type_st %></td>
+        <td><%= link_to 'Show', relation %></td>
+        <td><%= link_to 'Edit', edit_relation_path(relation) %></td>
+        <td><%= link_to 'Destroy', relation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Relation', new_relation_path %>
+
+<script type="text/javascript">
+  var width  = 1500,
+      height = 1500;
+
+  var color = d3.scale.category20();
+
+  var force = d3.layout.force()
+               .charge(-180)
+               .linkDistance(300)
+               .size([width, height]);
+
+  // var svg = d3.select("body").append("svg")
+  //                     .attr("width", width)
+  //                     .attr("height", height);  
+
+  var svg    = d3.select("svg").attr("width", width)
+                               .attr("height", height);
+
+  graph = <%=Relation.relations_as_json %> ;
+  //d3.json("./data2.json", function(error, graph) {
+
+    force.nodes(graph.nodes)
+         .links(graph.links)
+         .start();
+
+    var link = svg.selectAll(".link").data(graph.links)
+                       .enter().append("line")
+                       .attr("class", "link")
+                       .style("stroke-width", function(d) { 2000 });
+
+    // var node = svg.selectAll(".node").data(graph.nodes)
+    //                    .enter().append("circle")
+    //                    .attr("class", "node")
+    //                    .attr("r", 25)
+    //                    .attr("fill", function(d) { return color(d.group); })
+    //                    .call(force.drag);
+                       //.text(function(d){return "X"})
+                       //.attr("fill", "url(#image)")
+
+
+    var node = svg.selectAll(".node").data(graph.nodes)
+                       .enter().append("svg:image")
+                       .attr("class", "node")
+                       .attr('width', 50)
+                       .attr('height', 54)
+                       .attr("xlink:href",function(d) { return d.avatar;})
+                      .call(force.drag);
+                       
+
+
+    node.append("title")
+        .text(function(d) { return d.name; });
+
+    force.on("tick", function() {
+      link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+      node.attr("x", function(d) { return d.x; })
+          .attr("y", function(d) { return d.y; });
+    });
+  //});
+
+
+</script>

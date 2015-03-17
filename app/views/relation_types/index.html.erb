@@ -1,0 +1,29 @@
+<section  id="top" class="one dark cover">
+    <div class="container">
+        <header>
+            <h2>Tipo de Relaciones</h2>
+        </header>   
+
+        <footer>
+            <table>             
+
+              <tbody align="left">
+                <% @relation_types.each do |relation_type| %>
+                  <tr>
+                    <td><%= relation_type.name %></td>
+                  
+                    <td><%= link_to '<span class="icon fa-search"></span>'.html_safe, edit_relation_type_path(relation_type) %></td>
+                    <td><%= link_to '<span class="icon fa-remove"></span>'.html_safe, relation_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+        </footer>
+
+        <br>
+
+        <%= button_to 'Nuevo Tipo de Relación', new_relation_type_path,:method=> :get  %>
+    </div>
+</section>
+
+

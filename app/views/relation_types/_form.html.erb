@@ -1,0 +1,35 @@
+<%= form_for(@relation_type) do |f| %>
+  <% if @relation_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@relation_type.errors.count, "error") %> prohibited this relation_type from being saved:</h2>
+
+      <ul>
+      <% @relation_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :name,class: "inputCentered",placeholder:"Tipo de Relación" %>
+  </div>
+  <b>Palabras Clave</b>
+  <ul>
+    <% @relation_type.key_words.each do |kw| %>
+      <li>
+          <%=kw.word%><%= link_to '<span class="icon fa-remove"></span>'.html_safe, kw, method: :delete, data: { confirm: 'Are you sure?' } %><br />
+
+
+      </li>
+    <%end%>
+  </ul>
+
+  <%= f.fields_for :key_words,@relation_type.key_words.build do |kw|%>
+    <%= kw.text_field :word,placeholder:"Palabra Clave",class: "inputCentered" %> 
+  <%end%>
+
+  <div class="actions">
+    <%= f.submit "Agregar" %>
+  </div>
+<% end %>

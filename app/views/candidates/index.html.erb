@@ -1,0 +1,29 @@
+<section  id="top" class="one dark cover">
+    <div class="container">
+        <header>
+            <h2>Candidatos</h2>
+        </header>   
+
+        <footer>
+            <table>             
+
+              <tbody align="left">
+                <% @candidates.each do |candidate| %>
+                  <tr>
+                    <td><%= candidate.name %></td>
+                    <!-- <td><%#= link_to '<span class="icon fa-search"></span>'.html_safe, candidate %></td> -->
+                    <td><%= link_to '<span class="icon fa-search"></span>'.html_safe, edit_candidate_path(candidate) %></td>
+                    <td>
+                        <%= link_to '<span class="icon fa-remove"></span>'.html_safe, candidate, method: :delete, data: { confirm: 'Are you sure?' } %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+        </footer>
+
+        <br>
+
+        <%= button_to 'Nuevo Candidato', new_candidate_path,:method=> :get  %>
+    </div>
+</section>
